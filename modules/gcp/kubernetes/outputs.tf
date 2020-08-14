@@ -44,7 +44,7 @@ output "endpoint" {
     * this explicit dependency, dependent resources can wait for the cluster
     * to be up.
     */
-    google_container_cluster.primary,
+    google_container_cluster.main,
     google_container_node_pool.pools,
     module.gcloud_wait_for_cluster.wait,
   ]
@@ -67,7 +67,7 @@ output "monitoring_service" {
 
 output "master_authorized_networks_config" {
   description = "Networks from which access to master is permitted"
-  value       = google_container_cluster.primary.master_authorized_networks_config
+  value       = google_container_cluster.main.master_authorized_networks_config
 }
 
 output "master_version" {

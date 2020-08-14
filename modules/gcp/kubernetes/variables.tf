@@ -172,4 +172,50 @@ variable "node_pools" {
   ]
 }
 
+variable "gcloud_upgrade" {
+  type        = bool
+  description = "Whether to upgrade gcloud at runtime"
+  default     = false
+}
 
+variable "gcloud_skip_download" {
+  type        = bool
+  description = "Whether to skip downloading gcloud (assumes gcloud is already available outside the module)"
+  default     = true
+}
+
+variable "network_project_id" {
+  type        = string
+  description = "The project ID of the shared VPC's host (for shared vpc support)"
+  default     = ""
+}
+
+variable "network_policy_provider" {
+  type        = string
+  description = "The network policy provider."
+  default     = "CALICO"
+}
+
+variable "zones" {
+  type        = list(string)
+  description = "The zones to host the cluster in (optional if regional cluster / required if zonal)"
+  default     = []
+}
+
+variable "stub_domains" {
+  type        = map(list(string))
+  description = "Map of stub domains and their resolvers to forward DNS queries for a certain domain to an external DNS server"
+  default     = {}
+}
+
+variable "upstream_nameservers" {
+  type        = list(string)
+  description = "If specified, the values replace the nameservers taken by default from the node’s /etc/resolv.conf"
+  default     = []
+}
+
+variable "master_authorized_networks" {
+  type        = list(object({ cidr_block = string, display_name = string }))
+  description = "List of master authorized networks. If none are provided, disallow external access (except the cluster node IPs, which GKE automatically whitelists)."
+  default     = []
+}
