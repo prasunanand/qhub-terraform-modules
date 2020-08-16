@@ -216,6 +216,13 @@ variable "node_pools_oauth_scopes" {
   }
 }
 
+variable "disable_legacy_metadata_endpoints" {
+  type        = bool
+  description = "Disable the /0.1/ and /v1beta1/ metadata server endpoints on the node. Changing this value will cause all node pools to be recreated."
+  default     = true
+}
+
+
 
 variable "gcloud_upgrade" {
   type        = bool
