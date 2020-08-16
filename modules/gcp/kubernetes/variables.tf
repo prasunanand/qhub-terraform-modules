@@ -202,6 +202,17 @@ variable "zones" {
   default     = []
 }
 
+variable "network" {
+  type        = string
+  description = "The VPC network to host the cluster in (required)"
+}
+
+variable "create_service_account" {
+  type        = bool
+  description = "Defines if service account specified to run nodes should be created."
+  default     = true
+}
+
 variable "stub_domains" {
   type        = map(list(string))
   description = "Map of stub domains and their resolvers to forward DNS queries for a certain domain to an external DNS server"
