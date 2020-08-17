@@ -143,7 +143,7 @@ resource "google_container_cluster" "main" {
   subnetwork = "projects/${local.network_project_id}/regions/${var.region}/subnetworks/${var.subnetwork}"
 
   min_master_version = local.master_version
-
+  initial_node_count       = 1
   logging_service    = var.logging_service
   monitoring_service = var.monitoring_service
 
@@ -222,6 +222,7 @@ resource "google_container_cluster" "main" {
   }
 
   remove_default_node_pool = true
+  
 }
 
 /******************************************
@@ -333,4 +334,23 @@ resource "google_container_node_pool" "pools" {
     update = "45m"
     delete = "45m"
   }
+}
+
+module "gcloud_wait_for_cluster" {
+  source  = "terraform-google-modules/gcloud/google"
+  version = "~> 1.3.0"
+  enabled = var.skip_provisioners
+
+  upgrade       = var.gcloud_upgrade
+  skip_download = var.gcloud_skip_download
+
+  create_cmd_entrypoint  = "${path.module}/scripts/wait-for-cluster.sh"
+  create_cmd_body        = "${var.project_id} ${var.name}"
+  destroy_cmd_entrypoint = "${path.module}/scripts/wait-for-cluster.sh"
+  destroy_cmd_body       = "${var.project_id} ${var.name}"
+
+  module_depends_on = concat(
+    [google_container_cluster.primary.master_version],
+    [for pool in google_container_node_pool.pools : pool.name]
+  )
 }
