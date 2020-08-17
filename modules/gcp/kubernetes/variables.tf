@@ -150,16 +150,6 @@ variable "additional_node_group_oauth_scopes" {
   default     = []
 }
 
-variable "node_groups" {
-  description = "Node groups to add to GCP Kubernetes Cluster"
-  type = list(object({
-    name          = string
-    instance_type = string
-    min_size      = number
-    max_size      = number
-  }))
-}
-
 # difference here qhub uses node_pools whereas tgm uses node_pools
 variable "node_pools" {
   type        = list(map(string))
