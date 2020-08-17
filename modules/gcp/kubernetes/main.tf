@@ -50,23 +50,23 @@ locals {
   }]
 
 
-  cluster_output_name           = google_container_cluster.primary.name
-  cluster_output_regional_zones = google_container_cluster.primary.node_locations
+  cluster_output_name           = google_container_cluster.main.name
+  cluster_output_regional_zones = google_container_cluster.main.node_locations
   cluster_output_zonal_zones    = local.zone_count > 1 ? slice(var.zones, 1, local.zone_count) : []
   cluster_output_zones          = local.cluster_output_regional_zones
 
-  cluster_endpoint           = (var.enable_private_nodes && length(google_container_cluster.primary.private_cluster_config) > 0) ? (var.deploy_using_private_endpoint ? google_container_cluster.primary.private_cluster_config.0.private_endpoint : google_container_cluster.primary.private_cluster_config.0.public_endpoint) : google_container_cluster.primary.endpoint
-  cluster_peering_name       = (var.enable_private_nodes && length(google_container_cluster.primary.private_cluster_config) > 0) ? google_container_cluster.primary.private_cluster_config.0.peering_name : null
+  cluster_endpoint           = (var.enable_private_nodes && length(google_container_cluster.main.private_cluster_config) > 0) ? (var.deploy_using_private_endpoint ? google_container_cluster.main.private_cluster_config.0.private_endpoint : google_container_cluster.main.private_cluster_config.0.public_endpoint) : google_container_cluster.main.endpoint
+  cluster_peering_name       = (var.enable_private_nodes && length(google_container_cluster.main.private_cluster_config) > 0) ? google_container_cluster.main.private_cluster_config.0.peering_name : null
   cluster_endpoint_for_nodes = var.master_ipv4_cidr_block
 
-  cluster_output_master_auth                        = concat(google_container_cluster.primary.*.master_auth, [])
-  cluster_output_master_version                     = google_container_cluster.primary.master_version
-  cluster_output_min_master_version                 = google_container_cluster.primary.min_master_version
-  cluster_output_logging_service                    = google_container_cluster.primary.logging_service
-  cluster_output_monitoring_service                 = google_container_cluster.primary.monitoring_service
-  cluster_output_network_policy_enabled             = google_container_cluster.primary.addons_config.0.network_policy_config.0.disabled
-  cluster_output_http_load_balancing_enabled        = google_container_cluster.primary.addons_config.0.http_load_balancing.0.disabled
-  cluster_output_horizontal_pod_autoscaling_enabled = google_container_cluster.primary.addons_config.0.horizontal_pod_autoscaling.0.disabled
+  cluster_output_master_auth                        = concat(google_container_cluster.main.*.master_auth, [])
+  cluster_output_master_version                     = google_container_cluster.main.master_version
+  cluster_output_min_master_version                 = google_container_cluster.main.min_master_version
+  cluster_output_logging_service                    = google_container_cluster.main.logging_service
+  cluster_output_monitoring_service                 = google_container_cluster.main.monitoring_service
+  cluster_output_network_policy_enabled             = google_container_cluster.main.addons_config.0.network_policy_config.0.disabled
+  cluster_output_http_load_balancing_enabled        = google_container_cluster.main.addons_config.0.http_load_balancing.0.disabled
+  cluster_output_horizontal_pod_autoscaling_enabled = google_container_cluster.main.addons_config.0.horizontal_pod_autoscaling.0.disabled
 
 
   master_authorized_networks_config = length(var.master_authorized_networks) == 0 ? [] : [{
@@ -80,7 +80,7 @@ locals {
   cluster_master_auth_list_layer2 = local.cluster_master_auth_list_layer1[0]
   cluster_master_auth_map         = local.cluster_master_auth_list_layer2[0]
 
-  cluster_location = google_container_cluster.primary.location
+  cluster_location = google_container_cluster.main.location
   cluster_region   = var.regional ? var.region : join("-", slice(split("-", local.cluster_location), 0, 2))
   cluster_zones    = sort(local.cluster_output_zones)
 
