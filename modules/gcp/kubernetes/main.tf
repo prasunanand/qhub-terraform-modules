@@ -64,7 +64,7 @@ locals {
   cluster_output_min_master_version                 = google_container_cluster.main.min_master_version
   cluster_output_logging_service                    = google_container_cluster.main.logging_service
   cluster_output_monitoring_service                 = google_container_cluster.main.monitoring_service
-  cluster_output_network_policy_enabled             = google_container_cluster.main.addons_config[0].network_policy_config.[0].disabled
+  cluster_output_network_policy_enabled             = google_container_cluster.main.addons_config[0].network_policy_config[0].disabled
   cluster_output_http_load_balancing_enabled        = google_container_cluster.main.addons_config[0].http_load_balancing[0].disabled
   cluster_output_horizontal_pod_autoscaling_enabled = google_container_cluster.main.addons_config[0].horizontal_pod_autoscaling[0].disabled
 
